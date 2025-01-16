@@ -15,6 +15,7 @@ console = Console()
 
 class BootcImageBuilder:
     def __init__(self):
+        # Remember to update the Ollama host url
         self.ollama_host = os.getenv('OLLAMA_HOST', 'http://192.168.10.220:11434')
         self.workspace_dir = "/workspace"
 
@@ -25,6 +26,7 @@ class BootcImageBuilder:
         )
     def get_models():
         try:
+            # Remember to update the Ollama host url
             response = requests.get('http://192.168.10.220:11434/api/ps')
             response.raise_for_status()
         
