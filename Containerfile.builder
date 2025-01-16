@@ -4,8 +4,8 @@ FROM registry.access.redhat.com/ubi9/python-39:latest
 USER root
 
 # Register and attach using activation key
-ENV ACTIVATION_KEY=development-activation-key
-ENV ORG=5668801
+ENV ACTIVATION_KEY=development-activation-key # Replace with your activation key
+ENV ORG=XXXXXX # Replace with your organization ID
 RUN subscription-manager register --activationkey ${ACTIVATION_KEY} --org ${ORG}
 # Clean up
 RUN rm -rf /root/.rhsm
