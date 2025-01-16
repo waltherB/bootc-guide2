@@ -64,7 +64,6 @@ class BootcImageBuilder:
                     "prompt": prompt,
                     "stream": False
                 },
-                #verify=False  # Since we're using HTTPS
                 verify=certifi.where
             )
         except requests.exceptions.SSLError as ssl_err:
@@ -143,7 +142,7 @@ class BootcImageBuilder:
         return containerfile
         import subprocess
         subprocess.run(["vim", os.path.join(self.workspace_dir, 'Containerfile')])
-        
+
     def build_image(self, target_image: str) -> bool:
         console.print("\n[yellow]Building image...[/yellow]")
         
