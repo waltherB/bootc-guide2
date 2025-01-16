@@ -1,0 +1,19 @@
+# podman-compose.yaml
+version: '3.8'
+
+services:
+  bootc-builder:
+    build:
+      context: .
+      dockerfile: Containerfile.builder
+    volumes:
+      - ./workspace:/workspace
+      - $XDG_RUNTIME_DIR/podman/podman.sock:/var/run/podman.sock
+      - ${HOME}/.config/containers:/root/.config/containers:ro
+    environment:
+      - OLLAMA_HOST=https://ollama.sme-it.dk
+      - STORAGE_DRIVER=overlay
+      - STORAGE_OPTS=overlay.mount_program=/usr/bin/fuse-overlayfs
+    security_opt:
+      - label=disable
+    command: ["python", "/app/guide.py"]
