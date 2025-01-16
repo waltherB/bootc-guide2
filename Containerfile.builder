@@ -6,7 +6,7 @@ USER root
 # Register and attach using activation key
 # Replace with your activation key and organization ID
 ENV ACTIVATION_KEY=your-activation-key 
-ENV ORG=XXXXXX # Replace with your organization ID
+ENV ORG=XXXXXX 
 RUN subscription-manager register --activationkey ${ACTIVATION_KEY} --org ${ORG}
 # Clean up
 RUN rm -rf /root/.rhsm
