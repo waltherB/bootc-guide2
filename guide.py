@@ -139,10 +139,11 @@ class BootcImageBuilder:
         
         # Save Containerfile
         with open(os.path.join(self.workspace_dir, 'Containerfile'), 'w') as f:
-            f.write(containerfile)vim 
-            
+            f.write(containerfile)
         return containerfile
-
+        import subprocess
+        subprocess.run(["vim", os.path.join(self.workspace_dir, 'Containerfile')])
+        
     def build_image(self, target_image: str) -> bool:
         console.print("\n[yellow]Building image...[/yellow]")
         
