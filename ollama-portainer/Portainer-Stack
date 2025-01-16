@@ -1,0 +1,42 @@
+services:
+  webui:
+    container_name: OLLAMA-WEBUI
+    image: ghcr.io/open-webui/open-webui:0.5.4
+    volumes:
+      - /volume1/docker/ollama/webui:/app/backend/data:rw #Local and container volume paths. Create the local folder /volume1/docker/ollama/webui
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    ports:
+      - 8271:8080
+    restart: on-failure
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  ollama:
+    container_name: OLLAMA
+    image: ollama/ollama:latest #For a host with an AMD CPU, use the following image ollama/ollama:rocm instead of ollama/ollama:latest. There is also CUDA support with the image ollama/ollama:cuda
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+    volumes:
+      - /volume1/docker/ollama/data:/root/.ollama:rw #Local and container volume paths. Create the local folder /volume1/docker/ollama/data 
+      - /volume1/docker/ollama/entrypoint/entrypoint.sh:/entrypoint.sh #Create the local folder /volume1/docker/ollama/entrypoint and add the entrypoint.sh file
+    environment:
+      MODELS: llama3.2,codellama #Check all the models at the following link https://ollama.com/library - You can separate models by commas like llama3.2,gemma2,mistral
+      OLLAMA_INSTALL_MODELS: llama3.2,codellama #Check all the models at the following link https://ollama.com/library - You can separate models by commas like llama3.2,gemma2,mistral
+      OLLAMA_HOSTNAME: ollama.example.com #Change this to your domain name or IP address
+      OLLAMA_HOST: 0.0.0.0 #For accepting connections from all IP addresses also on the docker bridge network
+    ports:
+      - 11434:11434
+    healthcheck:
+      test: ["CMD", "ollama", "--version"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: on-failure:5
